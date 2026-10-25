@@ -17,7 +17,7 @@ Este projeto transforma um PC Windows em receptor AirPlay: você pode espelhar a
 - **Network:** sender and PC must be reachable on the same local network.
 - **License:** GPL-3.0; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
 
-This repository contains the source code and build instructions. It does not currently publish a packaged Windows installer or ZIP release. To run this snapshot, follow [Build from source](#build-from-source). The older v0.3.0 binary release from the original project is [available here](https://github.com/moieric11/AirPlay-Windows/releases/tag/v0.3.0); it may not include changes in this repository.
+This repository provides a ready-to-run Windows ZIP in [Releases](https://github.com/maaykonsuly-ops/AirPlay-Windows/releases/latest), as well as the source code. No compiler is needed to use the ZIP. The download and extraction steps are below.
 
 ## What people ask
 
@@ -63,14 +63,25 @@ O programa grava sessões recebidas em MP4 e oferece decodificação/renderizaç
 
 O aplicativo é C++17 e usa CMake, FFmpeg, SDL2, OpenSSL e libplist, entre outros. O código do projeto está sob GPL-3.0. A lista completa de componentes, funções e licenças está em [Dependências e licenças](docs/DEPENDENCIES.md).
 
-## Get started
+## Download and run (no coding required)
 
-1. [Build the application from source](#build-from-source); this repository has no packaged binary release yet.
-2. Run `airplay-windows.exe` on a Windows x64 PC.
-3. Connect the sender and PC to the same local network and allow the app through Windows Firewall on that network.
-4. Open **Screen Mirroring** on the iPhone/iPad and select **AirPlay-Windows**.
+1. Open the [latest Windows release](https://github.com/maaykonsuly-ops/AirPlay-Windows/releases/latest).
+2. In **Assets**, download `airplay-windows-v0.3.0-x64.zip`. Use the ZIP asset, not GitHub's **Source code (zip)** link; the source archive does not contain a ready-to-run program.
+3. In File Explorer, right-click the downloaded ZIP and choose **Extract All**. Keep the extracted `.exe` and `.dll` files together in the same folder.
+4. Run `airplay-windows.exe`. If Windows asks about network access, allow it on your private network.
+5. Connect the iPhone/iPad and PC to the same Wi-Fi network, open **Screen Mirroring** on the Apple device, and select **AirPlay-Windows**.
 
-The receiver uses native Windows mDNS; Bonjour SDK and Apple software are not required for normal network mirroring. See [Networking and USB](#networking-and-usb) if the receiver does not appear in the sender's list.
+The ZIP is portable: there is no installer. It includes the runtime DLLs the program needs. Keep the files in the extracted folder together. Normal Wi-Fi mirroring uses Windows' native mDNS; Bonjour and Apple software are not required. See [Networking and USB](#networking-and-usb) if the receiver does not appear.
+
+### Baixar e usar (português)
+
+1. Abra a página da [versão mais recente](https://github.com/maaykonsuly-ops/AirPlay-Windows/releases/latest).
+2. Em **Assets**, baixe `airplay-windows-v0.3.0-x64.zip`. Não escolha **Source code (zip)**: esse arquivo é apenas o código-fonte.
+3. No Explorador de Arquivos, clique com o botão direito no ZIP e selecione **Extrair Tudo**. Mantenha o `.exe` e os arquivos `.dll` juntos na pasta extraída.
+4. Abra `airplay-windows.exe`. Se o Windows pedir acesso à rede, permita na sua rede privada.
+5. Conecte o iPhone/iPad e o PC ao mesmo Wi-Fi. No iPhone/iPad, abra **Espelhamento de Tela** e escolha **AirPlay-Windows**.
+
+Não precisa instalar nem compilar o programa para usar esse ZIP. Para compilar o código-fonte, veja [Build from source](#build-from-source).
 
 **Runtime:** Windows 10 1809+ or Windows 11, x64. GPU features require compatible graphics hardware and drivers. Software decoding is available as a fallback.
 
