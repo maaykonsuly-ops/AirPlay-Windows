@@ -1,24 +1,78 @@
-# AirPlay Windows Receiver
+# AirPlay Receiver for Windows — Mirror iPhone and iPad to PC
 
-Native AirPlay receiver for Windows: screen mirroring, RAOP audio and MP4
-recording, based on [UxPlay](https://github.com/FDH2/UxPlay).
+**AirPlay-Windows turns a Windows 10/11 PC into an AirPlay receiver.** Mirror an iPhone or iPad screen to your PC over the local network, receive AirPlay audio, and optionally record the session as an MP4 file. It is a native C++ application based on the open-source [UxPlay](https://github.com/FDH2/UxPlay) project.
 
-Latest release: [v0.3.0](https://github.com/moieric11/AirPlay-Windows/releases/tag/v0.3.0)
-— [what changed](docs/releases/v0.3.0.md).
+If you're looking for an **AirPlay receiver for Windows** or an **iPhone screen mirroring app for Windows PC**, this project receives the stream on Windows. It does not send the Windows desktop to an Apple device.
+
+### Resposta rápida (português)
+
+Este projeto transforma um PC Windows em receptor AirPlay: você pode espelhar a tela de um iPhone ou iPad pela rede local, reproduzir áudio recebido e gravar a sessão em MP4. O computador e o dispositivo Apple precisam estar na mesma rede. O projeto é gratuito e open source (GPL-3.0). Não é um app para transmitir a tela do Windows ao iPhone e não reproduz vídeo protegido por DRM.
+
+### At a glance
+
+- **For:** Windows 10 version 1809 or newer, and Windows 11 (x64).
+- **Receives:** AirPlay screen mirroring (H.264/HEVC) and RAOP audio (AAC-ELD/ALAC).
+- **Can do:** display the stream, show track information, and record video to MP4.
+- **Optional:** D3D11 GPU decoding and recording; software decoding is available.
+- **Network:** sender and PC must be reachable on the same local network.
+- **License:** GPL-3.0; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+
+This repository contains the source code and build instructions. It does not currently publish a packaged Windows installer or ZIP release. To run this snapshot, follow [Build from source](#build-from-source). The older v0.3.0 binary release from the original project is [available here](https://github.com/moieric11/AirPlay-Windows/releases/tag/v0.3.0); it may not include changes in this repository.
+
+## What people ask
+
+### Can I mirror my iPhone or iPad screen to a Windows PC?
+
+Yes. Start the receiver, connect both devices to the same local network, open **Screen Mirroring** on the iPhone/iPad, and choose **AirPlay-Windows**. The PC acts as the receiver, so a separate Apple TV is not needed for this network mirroring setup.
+
+### Is this an AirPlay app for Windows, or an app to send my PC screen to iPhone?
+
+It is an **AirPlay receiver for Windows**. Apple devices send supported video and audio to the Windows PC. It does not stream the Windows desktop to an iPhone, and it is not a general-purpose remote desktop tool.
+
+### Does it need Bonjour, an Apple TV, or a USB cable?
+
+Normal Wi-Fi mirroring uses Windows' native mDNS and does not require Bonjour, iTunes, or an Apple TV. The optional USB path uses Apple Personal Hotspot networking and Windows USB Ethernet drivers; it is not direct USB video capture.
+
+### Can it receive audio or record the iPhone screen?
+
+It receives RAOP audio, displays the mirrored screen, and can record the session as an MP4 with H.264/HEVC video and AAC audio when an audio stream is available. It does not record microphone or Windows system audio.
+
+### Does it work with Netflix or other DRM-protected video?
+
+No. DRM-protected direct streaming is unsupported. A working screen-mirroring connection does not guarantee that a streaming app permits its protected video to be displayed or recorded by a receiver.
+
+## Perguntas comuns (português)
+
+### Como espelhar a tela do iPhone no PC Windows?
+
+Execute o AirPlay-Windows no PC, conecte o iPhone e o computador à mesma rede local, abra **Espelhamento de Tela** no iPhone e selecione **AirPlay-Windows**. O receptor funciona em Windows 10 (versão 1809 ou mais recente) e Windows 11, 64 bits.
+
+### O que é um receptor AirPlay para Windows?
+
+É um programa que faz o PC receber vídeo e áudio enviados por dispositivos Apple. Este projeto recebe espelhamento de tela H.264/HEVC e áudio RAOP AAC-ELD/ALAC. Ele não transmite a tela do PC para o iPhone.
+
+### Preciso de Apple TV, Bonjour ou cabo USB?
+
+Não para o uso normal pela rede local: o Windows anuncia o receptor usando mDNS nativo. O cabo USB só pode servir como rede do **Acesso Pessoal** da Apple; este programa não implementa captura de vídeo USB.
+
+### É possível gravar, usar GPU ou assistir conteúdo de streaming protegido?
+
+O programa grava sessões recebidas em MP4 e oferece decodificação/renderização por GPU D3D11 em hardware compatível, além do modo por software. Conteúdo protegido por DRM não é suportado.
+
+### Quais tecnologias e licenças o projeto usa?
+
+O aplicativo é C++17 e usa CMake, FFmpeg, SDL2, OpenSSL e libplist, entre outros. O código do projeto está sob GPL-3.0. A lista completa de componentes, funções e licenças está em [Dependências e licenças](docs/DEPENDENCIES.md).
 
 ## Get started
 
-1. Download the Windows x64 ZIP from [Releases](https://github.com/moieric11/AirPlay-Windows/releases).
-2. Extract the complete ZIP and run `airplay-windows.exe`, keeping the supplied DLLs alongside it.
-3. Connect the sending device and the PC to the same local network.
-4. Open Screen Mirroring on the sending device and select `AirPlay-Windows`.
+1. [Build the application from source](#build-from-source); this repository has no packaged binary release yet.
+2. Run `airplay-windows.exe` on a Windows x64 PC.
+3. Connect the sender and PC to the same local network and allow the app through Windows Firewall on that network.
+4. Open **Screen Mirroring** on the iPhone/iPad and select **AirPlay-Windows**.
 
-The receiver uses native Windows mDNS; Bonjour SDK and Apple software are not
-required for normal network mirroring. The optional USB Personal Hotspot route
-has separate driver requirements described below.
+The receiver uses native Windows mDNS; Bonjour SDK and Apple software are not required for normal network mirroring. See [Networking and USB](#networking-and-usb) if the receiver does not appear in the sender's list.
 
-**Runtime:** Windows 10 1809+ or Windows 11, x64. GPU features require compatible
-graphics hardware and drivers. Software decoding is available as a fallback.
+**Runtime:** Windows 10 1809+ or Windows 11, x64. GPU features require compatible graphics hardware and drivers. Software decoding is available as a fallback.
 
 ## Features and current limits
 
@@ -197,7 +251,7 @@ The commands below use a fresh vcpkg checkout pinned to the manifest baseline,
 matching the GitHub build rather than relying on a bundled vcpkg version:
 
 ```powershell
-git clone https://github.com/moieric11/AirPlay-Windows.git
+git clone https://github.com/maaykonsuly-ops/AirPlay-Windows.git
 cd AirPlay-Windows
 git clone https://github.com/microsoft/vcpkg.git build/vcpkg
 $baseline = (Get-Content vcpkg.json | ConvertFrom-Json).'builtin-baseline'

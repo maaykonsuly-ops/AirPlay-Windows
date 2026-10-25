@@ -17,7 +17,7 @@ D3D11 hardware and drivers.
 ## Configure and build (Windows)
 
 ```powershell
-git clone https://github.com/moieric11/AirPlay-Windows.git
+git clone https://github.com/maaykonsuly-ops/AirPlay-Windows.git
 cd AirPlay-Windows
 git clone https://github.com/microsoft/vcpkg.git build/vcpkg
 $baseline = (Get-Content vcpkg.json | ConvertFrom-Json).'builtin-baseline'

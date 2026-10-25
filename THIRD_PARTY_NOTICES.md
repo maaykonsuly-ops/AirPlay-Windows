@@ -132,6 +132,6 @@ but their structure and field names are echoed throughout `src/`:
 
 If you hold rights to any of the components above and disagree with
 the way we redistribute them, please open an issue at
-<https://github.com/moieric11/AirPlay-Windows/issues> — we will
+<https://github.com/maaykonsuly-ops/AirPlay-Windows/issues> — we will
 respond within a reasonable delay and remove or replace the asset
 as appropriate.
